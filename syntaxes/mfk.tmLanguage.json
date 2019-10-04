@@ -1,0 +1,42 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Millfork",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		}
+		,
+		{
+			"include": "#comments"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.mfk",
+				"match": "\\b(if|while|for|return|byte|word|int24|long|sbyte|ubyte|pointer)\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.mfk",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.mfk",
+					"match": "\\\\."
+				}
+			]
+		},
+		"comments": {
+			"patterns": [{
+				"name": "comment.line.ca65",
+				"match": "//.*$"
+			}]
+		}
+	},
+	"scopeName": "source.mfk"
+}

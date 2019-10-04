@@ -1,0 +1,125 @@
+{
+	"name": "mfkcomx16",
+	"publisher": "Ambze05",
+	"icon": "x16.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Ambez05/mcx16vscodeext"
+    },
+	"displayName": "Millfork - Commander X16",
+	"description": "Provides support for Millfork and the Commander X16 Emulator",
+	"version": "1.0.0",
+	"engines": {
+		"vscode": "^1.38.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extension.build_and_run",
+		"onCommand:extension.build"
+	],
+	"main": "./extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.build_and_run",
+				"title": "Millfork: X16 Build and Run"
+			},
+			{
+				"command": "extension.build",
+				"title": "Millfork: X16 Build"
+			}
+		],
+		"keybindings": [
+			{
+			  "command": "extension.build_and_run",
+			  "key": "f5",
+			  "when": "editorTextFocus"
+			},
+			{
+				"command": "extension.build",
+				"key": "ctrl+f5",
+				"mac": "cmd+f5",
+				"when": "editorTextFocus"
+			  }
+		],
+		"configuration": {
+            "type": "object",
+            "title": "Millfork: X16 Configuration",
+            "properties": {
+                "millforkx16.Compiler": {
+                    "type": "string",
+                    "default": "c:\\data\\X16\\Millfork\\millfork.exe",
+                    "description": "Full path to millfork.exe"
+				},
+                "millforkx16.EmulatorX16": {
+                    "type": "string",
+                    "default": "c:\\data\\X16\\EMU\\x16emu.exe",
+                    "description": "Full path to x16EMU.exe"
+				},
+                "millforkx16.OptionsSaveOnBuild": {
+                    "type": "boolean",
+                    "default": "true",
+                    "description": "Save before Build?"
+				},				
+                "millforkx16.OptionsSourceOverride": {
+                    "type": "string",
+                    "default": "",
+                    "description": "If you want to use a fixed file to compile with include the full path of this file here"
+				},				
+                "millforkx16.OptionsIncludeDirectory": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Additional Include Directories"
+				},
+				"millforkx16.OptionsAdditionalParams": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Any optional paramteres to Millfork"
+				},
+				"millforkx16.OptionsMillforkPlatformTarget": {
+                    "type": "string",
+                    "default": "x16_experimental",
+                    "description": "Millfork Plaform Type"
+				},
+				"millforkx16.ReplaceMillforkCommand": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Override the command string passed to Milfork.  This Does not included the Executable Name."
+				}
+				,
+				"millforkx16.ReplaceX16EmuCommand": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Override the command string passed to X16EMU.  This Does not included the Execute Name."
+				}
+            }
+        },  
+		"languages": [{
+            "id": "mfk",
+            "aliases": ["Millfork", "mfk"],
+            "extensions": ["mfk"],
+            "configuration": "./language-configuration.json"
+        }],
+		"grammars": [{
+            "language": "mfk",
+            "scopeName": "source.mfk",
+            "path": "./syntaxes/mfk.tmLanguage.json"
+        }]
+	},
+	"scripts": {
+		"test": "node ./test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.6",
+		"@types/node": "^10.12.21",
+		"@types/vscode": "^1.38.0",
+		"eslint": "^5.13.0",
+		"glob": "^7.1.4",
+		"mocha": "^6.1.4",
+		"typescript": "^3.3.1",
+		"vscode-test": "^1.2.0"
+	}
+}
