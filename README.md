@@ -60,5 +60,6 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-None
+* Limmited testing on some options has been done.
+
 

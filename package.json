@@ -34,13 +34,13 @@
 		"keybindings": [
 			{
 			  "command": "extension.build_and_run",
-			  "key": "f5",
+			  "key": "f6",
 			  "when": "editorTextFocus"
 			},
 			{
 				"command": "extension.build",
-				"key": "ctrl+f5",
-				"mac": "cmd+f5",
+				"key": "ctrl+f6",
+				"mac": "cmd+f6",
 				"when": "editorTextFocus"
 			  }
 		],
@@ -50,12 +50,12 @@
             "properties": {
                 "millforkx16.Compiler": {
                     "type": "string",
-                    "default": "c:\\data\\X16\\Millfork\\millfork.exe",
+                    "default": "",
                     "description": "Full path to millfork.exe"
 				},
                 "millforkx16.EmulatorX16": {
                     "type": "string",
-                    "default": "c:\\data\\X16\\EMU\\x16emu.exe",
+                    "default": "",
                     "description": "Full path to x16EMU.exe"
 				},
                 "millforkx16.OptionsSaveOnBuild": {
