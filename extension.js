@@ -1,5 +1,3 @@
-const vscode = require('vscode');
-
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -99,7 +97,7 @@ function activate(context) {
 					mArgs = `\"${argEmuPath}\" -prg \"${detName}\"`;
 
 					let mOverX16Emu = getSettingValue("ReplaceX16EmuCommand");
-					if (mOverMil.trim() != "")
+					if (mOverX16Emu.trim() != "")
 					{
 						mArgs = `\"${argEmuPath}\" {mOverX16Emu}`;
 					}

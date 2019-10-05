@@ -1,4 +1,4 @@
-## Millfork - Commander X16
+# Millfork - Commander X16
 
 This provied support for these systems.
 
@@ -56,10 +56,3 @@ This extension contributes the following settings:
 * `Options Millfork Platform Target`: The Platform Target for Millfork.
 * `Replace Millfork Command`: Override the command string passed to Milfork.  This Does not included the Executable Name.
 * `Replace X16 Emu Command`: Override the command string passed to X16EMU.  This Does not included the Execute Name.
-
-
-## Known Issues
-
-* Limmited testing on some options has been done.
-
-
