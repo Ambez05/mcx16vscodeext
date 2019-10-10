@@ -5,3 +5,6 @@
 * First Version
 
 
+**1.0.3 Milfork Update**
+* Improved Syntax Highlighting
+

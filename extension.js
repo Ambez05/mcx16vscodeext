@@ -53,8 +53,15 @@ function activate(context) {
 		//Delete the file Target File
 		var fs = require('fs');
 		try {fs.unlinkSync(detName);} catch(err) {}
-		
 
+		//If File exists we should not compile as this will fail
+		if (fs.existsSync(detName)) {
+			millfork.appendLine('');
+			millfork.appendLine('Locked Destination File - Compile Aborted');
+			millfork.appendLine('');
+			return;
+		}
+		
 		//Included additional include directories if stipulated
 		let argOptionInDirs = getSettingValue("OptionsIncludeDirectory");
 		let optIncludDir = "";

@@ -1,26 +1,64 @@
-{
+{               
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
 	"name": "Millfork",
 	"patterns": [
 		{
-			"include": "#keywords"
+			"include": "#MP"
 		},
 		{
-			"include": "#strings"
-		}
-		,
+			"include": "#MT"
+		},
 		{
-			"include": "#comments"
+			"include": "#C"
+		},
+		{
+			"include": "#KC"
+		},
+		{
+			"include": "#KCL"
+		},
+		{
+			"include": "#SQD"
+		},
+		{
+			"include": "#CL"
+		},
+		{
+			"include": "#SM"
+		},
+		{
+			"include": "#KO"
+		},
+		{
+			"include": "#ST"
+		},
+		{
+			"include": "#SF"
+		},
+		{
+			"include": "#MI1"
+		},
+		{
+			"include": "#literals"
+		},
+		{
+			"include": "#operators"
 		}
 	],
 	"repository": {
-		"keywords": {
+		"KC": {
 			"patterns": [{
-				"name": "keyword.control.mfk",
-				"match": "\\b(if|while|for|return|byte|word|int24|long|sbyte|ubyte|pointer)\\b"
+				"name": "keyword.control",
+				"match": "\\b(if|else|for|while|do|goto|label|return)\\b"
 			}]
 		},
-		"strings": {
+		"KCL": {
+			"patterns": [{
+				"name": "keyword.control.less",
+				"match": "\\b(to|until|downto|parallelto|parallel|until|default|break|continue)\\b"
+			}]
+		},
+		"SQD": {
 			"name": "string.quoted.double.mfk",
 			"begin": "\"",
 			"end": "\"",
@@ -31,10 +69,85 @@
 				}
 			]
 		},
-		"comments": {
+		"CL": {
 			"patterns": [{
-				"name": "comment.line.ca65",
+				"name": "comment.line.mfk",
 				"match": "//.*$"
+			}]
+		},
+		"SM": {
+			"patterns": [{
+				"name": "storage.modifier",
+				"match": "\\b(const|volatile|register|static|stack|asm|inline|noinline|interrupt|kernal_interrupt|macro|reentrant|extern|const|segment|align)\\b"
+			}]
+		},
+		"KO": {
+			"patterns": [{
+				"name": "keyword.other",
+				"match": "\\b(fast|file|defaultz|scr|scrz)\\b"
+			}]
+		},
+		"ST": {
+			"patterns": [{
+				"name": "storage.type",
+				"match": "\\b(byte|ubyte|sbyte|word|long|pointer|void|bool|set_carry|set_zero|set_overflow|set_negative|clear_carry|clear_zero|clear_overflow|clear_negative|int16|int24|int32|int40|int48|int56|int64|int72|int80|int88|int96|int104|int112|int120|int128|unsigned8|signed8)\\b"
+			}]
+		},
+		"SF": {
+			"patterns": [{
+				"name": "support.function",
+				"match": "\\b(not|hi|lo|nonet|sizeof|sin|cos|tan|call|defined)\\b"
+			}]
+		},
+		"MI1": {
+			"patterns": [{
+				"name": "markup.heading",
+				"match": "\\.(addr|rawaddr)\\b"
+			}]
+		},
+		"MP": {
+			"patterns": [{
+				"name": "meta.preprocessor",
+				"match": "(#if|#elseif|#else|#endif|#define|#use|#pragma|#fatal#error|#warn|#infoeval|#info)"
+			}]
+		},
+		"MT": {
+			"patterns": [{
+				"name": "support.class",
+				"match": "\\b(import|segment|array|struct|union|enum|alias)\\b"
+			}]
+		},
+		"C": {
+			"patterns": [{
+				"name": "storage.type",
+				"match": "\\b(true|false)\\b"
+			}]
+		},
+		"literals": {
+			"patterns": [{
+				"name": "constant.numeric.binary",
+				"match": "%[01]+\\b"	
+			}, {
+				"name": "constant.numeric.hex",
+				"match": "(\\$[0-9A-Fa-f]+\\b)|\\b([0-9A-Fa-f]+h\\b)"
+			}, {
+				"name": "constant.numeric.decimal",
+				"match": "\\b[0-9]+\\b"
+			}, {
+				"name": "constant.language.unnamed-label",
+				"match": ":-+|:\\++"
+			}]
+		},
+		"operators": {
+			"patterns": [{
+				"name": "keyword.operators.immediate.ca65",
+				"match": "#"
+			}, {
+				"name": "keyword.operators.word.ca65",
+				"match": "\\.(?i:mod|bitnot|bitand|bitor|shl|shr|and|or|not|xor)\\b"
+			}, {
+				"name": "keyword.operators.misc.ca65",
+				"match": "=|<>|:=|\\+|-|\\*|/|\\&|~|\\||<<|>>|\\&\\&|\\|\\||!|<|>|<=|>="	
 			}]
 		}
 	},
