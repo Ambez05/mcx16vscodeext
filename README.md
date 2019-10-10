@@ -10,7 +10,7 @@ A middle-level programming language targeting 6502-based, 8080-based and Z80-bas
 
 An upcoming 8-Bit computer Designed by David Murray : The Commander X16™
 
-![avatar](https://github.com/sumneko/lua-language-server/raw/master/images//Goto%20Definition.gif)
+![SyntaxAndEmulator](Images/DemoScreen.PNG)
 
 ## Requirements
 
