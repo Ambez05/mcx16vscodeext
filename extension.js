@@ -11,6 +11,35 @@ function activate(context) {
 		return emulatorPath;         
 	}
 
+	function GetX6Toolkik()
+	{
+		
+		var locationUri = 'https://raw.githubusercontent.com/Ambez05/mcx16vscodeext/master/keywords.txt';
+		var outputFile = 'X16.mfk';
+
+		var download = require('download-file')
+		var curFile = vscode.window.activeTextEditor.document.fileName
+		var onlyPath = require('path').dirname(curFile);
+		
+		var options = {
+			directory: onlyPath,
+			filename: outputFile
+		}
+		
+		download(locationUri, options, function(err){
+			if (err) 
+			{
+				millfork.appendLine('Could not download Millfork X16 Toolkit : ' + err);
+			}
+			else
+			{
+				millfork.appendLine('Updated X16 Toolkit');
+			}
+		}) 
+
+
+	}
+
 	function RunMillfork(ExecuteEMU)
 	{
 
@@ -147,8 +176,14 @@ function activate(context) {
 		RunMillfork(false);
 	});
 
+
+	let f_x16toolkit = vscode.commands.registerCommand('extension.x16toolkit', function () {
+		GetX6Toolkik();
+	});
+
 	context.subscriptions.push(f_build_run);
 	context.subscriptions.push(f_build);
+	context.subscriptions.push(f_x16toolkit);
 }
 exports.activate = activate;
 
