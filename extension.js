@@ -11,40 +11,62 @@ function activate(context) {
 		return emulatorPath;         
 	}
 
-	function GetX6Toolkik()
+	 function GetX6Toolkit()
 	{
-		
-		var locationUri = 'https://raw.githubusercontent.com/Ambez05/mcx16vscodeext/master/keywords.txt';
-		var outputFile = 'X16.mfk';
 
-		var download = require('download-file')
-		var curFile = vscode.window.activeTextEditor.document.fileName
+		var locationUri = 'https://raw.githubusercontent.com/Ambez05/MillforkX16Toolkit/master/VSExtensionList.txt';
+
+		//Show the Milfork Console
+		millfork.show();
+
+
+		try
+		{
+			var curFile = vscode.window.activeTextEditor.document.fileName
+		} catch(err) 
+
+		{
+			millfork.appendLine('No open Text Editor , Could not set download location!')
+			return
+		}
+
+		
 		var onlyPath = require('path').dirname(curFile);
 		
-		var options = {
-			directory: onlyPath,
-			filename: outputFile
-		}
-		
-		download(locationUri, options, function(err){
-			if (err) 
-			{
-				millfork.appendLine('Could not download Millfork X16 Toolkit : ' + err);
-			}
-			else
-			{
-				millfork.appendLine('Updated X16 Toolkit');
-			}
-		}) 
+		var downloadFileSync = require('download-file-sync');
+		var content = downloadFileSync(locationUri);
+		var array = content.split("\n");
+		var fs = require('fs');
 
+		millfork.appendLine('Got Toolkit Resource File List');
+
+		//We have a string with the files to download.  Now lets split this string and save these files
+		//We will need to overwrite any existing items
+		for(let line of array) {
+			if (line.trim() != '')
+			{
+				locationUri = `https://raw.githubusercontent.com/Ambez05/MillforkX16Toolkit/master/${line}`
+				content = downloadFileSync(locationUri);
+				var path = `${onlyPath}/${line}`
+				fs.writeFileSync(path,content)	
+
+				millfork.appendLine(`Millfork X16 Download : ${line}`)
+			}
+		}
+
+		millfork.appendLine('Completed Millfork X16 Toolkit Download');
 
 	}
 
+	
 	function RunMillfork(ExecuteEMU)
 	{
 
 		//Check that we should execute
 		let currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
+
+		//Show the Milfork Console
+		millfork.show();
 
 		//Overide source file
 		let argSourceOver = getSettingValue("OptionsSourceOverride");
@@ -96,7 +118,7 @@ function activate(context) {
 		let optIncludDir = "";
 		if (argOptionInDirs.trim() != "")
 		{
-			optIncludDir = `-i ${argSourceOver}`;
+			optIncludDir = `-i ${argOptionInDirs}`;
 		}
 
 		//Build the ARGS fror the Compile
@@ -178,7 +200,7 @@ function activate(context) {
 
 
 	let f_x16toolkit = vscode.commands.registerCommand('extension.x16toolkit', function () {
-		GetX6Toolkik();
+		GetX6Toolkit();
 	});
 
 	context.subscriptions.push(f_build_run);

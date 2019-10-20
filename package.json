@@ -1,6 +1,9 @@
 {
 	"name": "mfkcomx16",
 	"publisher": "Ambze05",
+	"bundleDependencies": [
+		"download-file-sync"
+	],
 	"icon": "x16.png",
 	"repository": {
 		"type": "git",
@@ -8,7 +11,7 @@
 	},
 	"displayName": "Millfork - Commander X16",
 	"description": "Provides support for Millfork and the Commander X16 Emulator",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
@@ -122,18 +125,22 @@
 		]
 	},
 	"scripts": {
-		"test": "node ./test/runTest.js"
+		"test": "node ./test/runTest.js",
+		"preinstall": ""
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^5.2.6",
 		"@types/node": "^10.12.21",
 		"@types/vscode": "^1.38.0",
-		"download-file": "^0.1.5",
 		"eslint": "^5.13.0",
 		"glob": "^7.1.4",
 		"mocha": "^6.1.4",
 		"typescript": "^3.3.1",
-		"vscode-test": "^1.2.0"
+		"vscode-test": "^1.2.0",
+		"wait.for-es6": "^0.1.0"
+	},
+	"dependencies": {
+		"download-file-sync": "^1.0.4"
 	}
 }

@@ -37,6 +37,13 @@ For the Emulator to be launched with the build program that Commander X16 Emulat
 **Millfork: X16 Build and Run**
 * Run the Millfork Compiler and then the X16 Emulator
 
+**Millfork: X16 Toolkit Update**
+* Download the Developer Toolkit from Github into he Current Directory
+* Git Repository - https://github.com/Ambez05/MillforkX16Toolkit
+
+
+
+
 **Notes**
 * All commands will output results to Output stream called Millfork: X16
 * If the Compile fails the Emulator will not be started
