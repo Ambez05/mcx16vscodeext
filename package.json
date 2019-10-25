@@ -21,7 +21,8 @@
 	"activationEvents": [
 		"onCommand:extension.build_and_run",
 		"onCommand:extension.build",
-		"onCommand:extension.x16toolkit"
+		"onCommand:extension.x16toolkit",
+		"*"
 	],
 	"main": "./extension.js",
 	"contributes": {

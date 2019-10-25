@@ -5,13 +5,14 @@
 function activate(context) {
 
 
+
 	function getSettingValue(setName)
 	{
 		var emulatorPath = vscode.workspace.getConfiguration('millforkx16').get(setName, 'Name');
 		return emulatorPath;         
 	}
 
-	 function GetX6Toolkit()
+	function GetX6Toolkit()
 	{
 
 		var locationUri = 'https://raw.githubusercontent.com/Ambez05/MillforkX16Toolkit/master/VSExtensionList.txt';
@@ -186,6 +187,123 @@ function activate(context) {
 	
 	let vscode = require("vscode");
 	let millfork = vscode.window.createOutputChannel("Millfork X16");
+
+	//Test Dictionary
+	var CompItems = {}
+	CompItems["Test1"] = "Desc_1";
+	CompItems["Test2"] = "Desc_2";
+	CompItems["Test3"] = "Desc_3";
+
+	var commitCharItems = {}
+	commitCharItems["Con"] = {Desc: "Desc1",Items: ["1","2","3"]};
+	
+
+
+	provider1 = vscode.languages.registerCompletionItemProvider('mfk', {
+
+		provideCompletionItems(document, position, token, context) 
+		{
+			const simpleCompletion = new vscode.CompletionItem('Hello World!');
+			simpleCompletion.documentation = "This is the docuemation for hello World";
+			const simpleCompletion1 = new vscode.CompletionItem('Hello World2!');
+
+			const commitCharacterCompletion = new vscode.CompletionItem('console');
+			commitCharacterCompletion.commitCharacters = ['.'];
+			commitCharacterCompletion.documentation = new vscode.MarkdownString('Press `.` to get `console.`');
+
+			var items = []
+
+			for(var key in CompItems) {
+				var sC = new vscode.CompletionItem(key);
+				sC.documentation = CompItems[key]
+
+				items.push(sC)
+			}
+
+
+
+			for(var key in commitCharItems) {
+				var cCC = new vscode.CompletionItem(key);
+				cCC.commitCharacters = ['.'];
+				cCC.documentation = commitCharItems[key.Desc];
+
+				items.push(cCC);
+			  }
+
+
+			return items;
+		}
+
+	 })
+
+	 
+	 provider2 = vscode.languages.registerHoverProvider('mfk', {
+		provideHover(document, position, token) {
+			const hoveredWord = document.getText(document.getWordRangeAtPosition(position));
+			const mappedWord = "MyTest"
+
+			const range = document.getWordRangeAtPosition(position);
+            const word = document.getText(range);
+			
+			return new vscode.Hover({
+				language: "mfk",
+				value: "Hello Value " + word,
+			});
+		}
+	});
+
+	provider3 = vscode.languages.registerCompletionItemProvider(
+		'mfk',
+		{
+			provideCompletionItems(document, position) {
+
+				// get all text until the `position` and check if it reads `console.`
+				// and if so then complete if `log`, `warn`, and `error`
+				linePrefix = document.lineAt(position).text.substr(0, position.character);
+
+				//var re = new RegExp("([a-zA-Z\_0-9]+)\\.");
+				var re = /([a-zA-Z\_0-9]+)\./;
+				var myArray = re.exec(linePrefix);
+
+				if (myArray.length == 0)
+				{
+					return undefined;
+				}
+
+				if (myArray[1] in CompItems)
+				{
+
+					var items = []
+
+					//if (commitCharItems)
+					for(var key in commitCharItems) {
+						var cCC = new vscode.CompletionItem(key);
+						cCC.commitCharacters = ['.'];
+						cCC.documentation = commitCharItems[key.Desc];
+		
+						items.push(cCC);
+					  }
+	
+					return items;
+	
+				}
+				else
+				{
+					return undefined;
+				}
+
+			}
+		},
+		'.' // triggered whenever a '.' is being typed
+	);
+
+
+	context.subscriptions.push(provider1);
+	context.subscriptions.push(provider2);
+	context.subscriptions.push(provider3);
+	
+
+
 
 
 
