@@ -195,47 +195,40 @@ function activate(context) {
 	CompItems["Test3"] = "Desc_3";
 
 	var commitCharItems = {}
-	commitCharItems["Con"] = {Desc: "Desc1",Items: ["1","2","3"]};
+	commitCharItems["con"] = {Name: "Con",Desc: "Desc1",Items: ["1","2","3"]};
 	
-
 
 	provider1 = vscode.languages.registerCompletionItemProvider('mfk', {
 
 		provideCompletionItems(document, position, token, context) 
 		{
-			const simpleCompletion = new vscode.CompletionItem('Hello World!');
-			simpleCompletion.documentation = "This is the docuemation for hello World";
-			const simpleCompletion1 = new vscode.CompletionItem('Hello World2!');
-
-			const commitCharacterCompletion = new vscode.CompletionItem('console');
-			commitCharacterCompletion.commitCharacters = ['.'];
-			commitCharacterCompletion.documentation = new vscode.MarkdownString('Press `.` to get `console.`');
 
 			var items = []
 
 			for(var key in CompItems) {
 				var sC = new vscode.CompletionItem(key);
+				sC.label = key;
 				sC.documentation = CompItems[key]
 
 				items.push(sC)
 			}
 
-
-
+			
 			for(var key in commitCharItems) {
-				var cCC = new vscode.CompletionItem(key);
+				var label =commitCharItems[key].Name;
+				var cCC = new vscode.CompletionItem(label);
 				cCC.commitCharacters = ['.'];
-				cCC.documentation = commitCharItems[key.Desc];
+				cCC.documentation = commitCharItems[key].Desc;
 
 				items.push(cCC);
 			  }
 
-
+		
 			return items;
 		}
 
 	 })
-
+	 
 	 
 	 provider2 = vscode.languages.registerHoverProvider('mfk', {
 		provideHover(document, position, token) {
@@ -265,21 +258,21 @@ function activate(context) {
 				var re = /([a-zA-Z\_0-9]+)\./;
 				var myArray = re.exec(linePrefix);
 
-				if (myArray.length == 0)
+				//First match is the whole string
+				if (myArray == null || myArray.length <= 1)
 				{
 					return undefined;
 				}
 
-				if (myArray[1] in CompItems)
+				var key = myArray[1].toLocaleLowerCase();
+				if (key in commitCharItems)
 				{
 
 					var items = []
 
-					//if (commitCharItems)
-					for(var key in commitCharItems) {
-						var cCC = new vscode.CompletionItem(key);
-						cCC.commitCharacters = ['.'];
-						cCC.documentation = commitCharItems[key.Desc];
+					for (i = 0; i < commitCharItems[key].Items.length; i++) { 
+						var itemName = commitCharItems[key].Items[i];
+						var cCC = new vscode.CompletionItem(itemName,vscode.CompletionItemKind.Method);
 		
 						items.push(cCC);
 					  }
@@ -291,7 +284,6 @@ function activate(context) {
 				{
 					return undefined;
 				}
-
 			}
 		},
 		'.' // triggered whenever a '.' is being typed
