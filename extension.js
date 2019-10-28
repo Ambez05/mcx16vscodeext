@@ -59,7 +59,6 @@ function activate(context) {
 
 	}
 
-	
 	function RunMillfork(ExecuteEMU)
 	{
 
@@ -71,6 +70,7 @@ function activate(context) {
 
 		//Overide source file
 		let argSourceOver = getSettingValue("OptionsSourceOverride");
+		
 		if (argSourceOver.trim() != "")
 		{
 			currentlyOpenTabfilePath = argSourceOver;
@@ -177,6 +177,81 @@ function activate(context) {
 			}
 		});
 
+	}
+
+	function INT_ScaneFiles()
+	{
+		let dir = ""
+		
+		//Lets get the fields from Millfork - If this directory is configued
+		var fs = require('fs');
+		dir = getSettingValue("Compiler");
+		var path = require('path');
+		dir = path.dirname(dir);
+		dir = dir + "include\\"
+		var files = fs.readdirSync(dir);
+		
+		for(let file of files) {
+			if (file.toLocaleLowerCase().includes(".mfk") && file.toLocaleLowerCase().includes("x16"))
+			{
+				var file_Path = dir + file;
+				INT_ScanFile(file_Path);
+			}
+		}
+
+		//Scan all MFK files in the current Directory
+
+		//Scan all MFK files in the Include Directories 
+	}
+
+	function INT_ScanFile(FileName)
+	{
+		var fs = require('fs');
+		var contents = fs.readFileSync(FileName).toString();
+		var lines = contents.split('\n');
+		
+		
+		for(let line of lines) {
+			//const int24 VERA_SPRITES = $40800
+			var re = /const\s+([\S]+)\s+([\S]+)\s+=\s+([\S]+)\s*$/;
+			var myArray = re.exec(line);
+
+			//First match is the whole string
+			if (myArray != null && myArray.length > 1)
+			{
+				CompItems[myArray[2]] = `Value ${myArray[3]} Type ${myArray[1]}`;
+			}
+
+
+			/*
+			inline void vera_poke(int24 address, byte value) {
+			inline void vera_poke (int24 address, byte value) {
+			inline byte vera_poke (int24 address, byte value) {
+			void vera_upload_large(int24 address, pointer source, word size)
+			inline void vera_fill(int24 address, byte value, word size) {
+			inline asm void set_ram_bank(byte a) {
+			asm void read_also_joy1() {
+			asm void read_also_joy2() {
+			void x16_joy_byte0(byte value) {
+			asm void set_vera_layer_internal(pointer.vera_layer_setup ax, byte y) {
+			void V_PutString(byte x1,byte y1,byte x2,byte y2,byte color,byte newLineChar,word strWord)
+			void V_SetArea(byte x1,byte y1,byte x2,byte y2,byte data,byte color)
+			byte U_RandBetween(byte LoNum,byte HiNum)
+			byte K_KeyboardGetState() {
+			byte K_ModeGet() {
+			*/
+			re = /((|inline) *(asm)* *(|void|byte) ((\S+)\s*\(.*\)))/;
+			var myArray = re.exec(line);
+
+			//First match is the whole string
+			if (myArray != null && myArray.length > 1)
+			{
+				CompItems[myArray[6]] = `${myArray[0]}`;
+			}
+
+			
+			
+		}
 	}
 	
 	
@@ -289,6 +364,8 @@ function activate(context) {
 		'.' // triggered whenever a '.' is being typed
 	);
 
+
+	INT_ScaneFiles();
 
 	context.subscriptions.push(provider1);
 	context.subscriptions.push(provider2);
