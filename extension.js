@@ -25,7 +25,6 @@ function activate(context) {
 		{
 			var curFile = vscode.window.activeTextEditor.document.fileName
 		} catch(err) 
-
 		{
 			millfork.appendLine('No open Text Editor , Could not set download location!')
 			return
@@ -200,8 +199,45 @@ function activate(context) {
 		}
 
 		//Scan all MFK files in the current Directory
+		try
+		{
+			var curFile = vscode.window.activeTextEditor.document.fileName
+		}
+		catch(err) 
+		{
+			millfork.appendLine('No open Text Editor , Could not set Scan location!')
+			return
+		}
+	
+		var onlyPath = require('path').dirname(curFile);
+		files = fs.readdirSync(onlyPath);
+		for(let file of files) {
+			if (file.toLocaleLowerCase().includes(".mfk"))
+			{
+				var file_Path = onlyPath + "\\" + file;
+				INT_ScanFile(file_Path);
+			}
+		}
 
 		//Scan all MFK files in the Include Directories 
+		let argOptionInDirs = getSettingValue("OptionsIncludeDirectory");
+		if (argOptionInDirs.trim() != "")
+		{
+			var dirs = argOptionInDirs.split(",");
+			
+			for(let dir of dirs){
+
+				files = fs.readdirSync(dir);
+				for(let file of files) {
+					if (file.toLocaleLowerCase().includes(".mfk"))
+					{
+						var file_Path = dir + "\\" + file;
+						INT_ScanFile(file_Path);
+					}
+				}
+
+			}
+		}
 	}
 
 	function INT_ScanFile(FileName)
@@ -219,7 +255,7 @@ function activate(context) {
 			//First match is the whole string
 			if (myArray != null && myArray.length > 1)
 			{
-				CompItems[myArray[2]] = `Value ${myArray[3]} Type ${myArray[1]}`;
+				CompItems[myArray[2]] = `CValue ${myArray[3]} Type ${myArray[1]}`;
 			}
 
 
@@ -240,17 +276,17 @@ function activate(context) {
 			byte K_KeyboardGetState() {
 			byte K_ModeGet() {
 			*/
-			re = /((|inline) *(asm)* *(|void|byte) ((\S+)\s*\(.*\)))/;
+			re = /((asm|inline|void|byte|word|int24|long|int40|int48|sbyte|ubyte|pointer)+ +)(\w+) *\(.*\)/;
 			var myArray = re.exec(line);
 
 			//First match is the whole string
 			if (myArray != null && myArray.length > 1)
 			{
-				CompItems[myArray[6]] = `${myArray[0]}`;
-			}
+				CompItems[myArray[3]] = `F${myArray[0]}`;
 
-			
-			
+				//Hover item for function
+				HoverItms[myArray[3]] = `${myArray[0]}`;
+			}
 		}
 	}
 	
@@ -264,10 +300,11 @@ function activate(context) {
 	let millfork = vscode.window.createOutputChannel("Millfork X16");
 
 	//Test Dictionary
+	//	CompItems["Test1"] = "Desc_1";
 	var CompItems = {}
-	CompItems["Test1"] = "Desc_1";
-	CompItems["Test2"] = "Desc_2";
-	CompItems["Test3"] = "Desc_3";
+	
+	//	CompItems["Test1"] = "Desc_1";
+	var HoverItms = {}
 
 	var commitCharItems = {}
 	commitCharItems["con"] = {Name: "Con",Desc: "Desc1",Items: ["1","2","3"]};
@@ -283,7 +320,15 @@ function activate(context) {
 			for(var key in CompItems) {
 				var sC = new vscode.CompletionItem(key);
 				sC.label = key;
-				sC.documentation = CompItems[key]
+				sC.documentation = CompItems[key].substr(1)
+				if (CompItems[key].startsWith("C"))
+				{
+					sC.kind = vscode.CompletionItemKind.Constant
+				}
+				else
+				{
+					sC.kind = vscode.CompletionItemKind.Function
+				}
 
 				items.push(sC)
 			}
@@ -308,15 +353,23 @@ function activate(context) {
 	 provider2 = vscode.languages.registerHoverProvider('mfk', {
 		provideHover(document, position, token) {
 			const hoveredWord = document.getText(document.getWordRangeAtPosition(position));
-			const mappedWord = "MyTest"
+			
 
 			const range = document.getWordRangeAtPosition(position);
             const word = document.getText(range);
 			
-			return new vscode.Hover({
-				language: "mfk",
-				value: "Hello Value " + word,
-			});
+			//aeae
+			if (word in HoverItms)
+			{
+				return new vscode.Hover({
+					language: "mfk",
+					value: HoverItms[word]
+				});
+			}
+			else
+			{
+				return undefined;
+			}
 		}
 	});
 
