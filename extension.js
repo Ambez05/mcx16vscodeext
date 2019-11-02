@@ -163,8 +163,13 @@ function activate(context) {
 					millfork.appendLine('X16 Emulator ARGS : ' + mArgs);
 					millfork.appendLine('');
 					
+					//Get local directoy for spawn command
+					var path = require('path');
+					var localDir = path.dirname(currentlyOpenTabfilePath)
 					const spawnSync = require("child_process");
-					spawnSync.exec(mArgs);
+					spawnSync.exec(mArgs,{
+						cwd:  localDir
+					  });
 				}
 			}
 			else
