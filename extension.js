@@ -127,7 +127,7 @@ function activate(context) {
 		let mOverMil = getSettingValue("ReplaceMillforkCommand");
 		if (mOverMil.trim() != "")
 		{
-			mArgs = `\"${argComp}\" {mOverMil}`;
+			mArgs = `\"${argComp}\" ${mOverMil}`;
 		}
 		
 
@@ -157,7 +157,7 @@ function activate(context) {
 					let mOverX16Emu = getSettingValue("ReplaceX16EmuCommand");
 					if (mOverX16Emu.trim() != "")
 					{
-						mArgs = `\"${argEmuPath}\" {mOverX16Emu}`;
+						mArgs = `\"${argEmuPath}\" -prg \"${detName}\" ${mOverX16Emu}`;
 					}
 
 					millfork.appendLine('X16 Emulator ARGS : ' + mArgs);
